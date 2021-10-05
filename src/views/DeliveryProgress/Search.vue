@@ -56,8 +56,11 @@
       <button @click.prevent="resetAndRequest"
               :disabled="loading"
               class="btn btn-block btn-info">
-        <i class="d-none d-lg-block mdi mdi-magnify" />
-        <span class="d-lg-none">Pesquisar</span>
+        <i class="d-lg-block mdi mdi-magnify"
+           :class="{ 'run-fast': loading }" />
+        <span class="d-lg-none">
+          {{ loading ? 'Pesquisando...' : 'Pesquisar' }}
+        </span>
       </button>
     </div>
   </div>

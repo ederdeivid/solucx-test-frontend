@@ -56,6 +56,12 @@ export default class Pagination extends Vue {
 </script>
 
 <style scoped>
+.actions {
+  padding: 5px;
+  border: 1px solid #000;
+  border-radius: 10px;
+}
+
 .icons-previous-page i,
 .icons-next-page i {
   margin: 0 2px;

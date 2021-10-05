@@ -1,6 +1,6 @@
 <template>
   <div class="row col-12 m-0 d-flex justify-content-center mt-5">
-    <div class="col-3 mt-5 bg-secondary text-white d-flex flex-column align-items-center position-relative rounded card__custom">
+    <div class="col-12 col-md-6 col-lg-3 mt-5 bg-dark text-white d-flex flex-column align-items-center position-relative rounded card__custom">
       <div class="mx-auto avatar position-relative">
         <img :src="newImageSize(detailsFromRoute.image || detailsFromStorage.image)"
              class="rounded-circle bg-white no__image__loaded">

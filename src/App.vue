@@ -1,6 +1,12 @@
 <template>
-  <div id="nav">
-    <router-link to="/">Home</router-link>
+  <div id="nav"
+       class="mb-4 bg-dark text-left px-3">
+    <router-link to="/" class="align-items-center">
+      <i class="mdi mdi-home mdi-48px text-white" />
+      <span class="text-white title--solucx--test mb-2">
+        Início
+      </span>
+    </router-link>
   </div>
   <router-view />
 </template>
@@ -14,20 +20,13 @@
   color: #2c3e50;
 }
 
-body {
-  background-color: #343a40 !important;
-}
-
 #nav {
-  padding: 30px;
+  box-shadow: 0px 1px 15px 1px rgba(0, 0, 0, 0.1);
 }
 
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-  color: #42b983;
+.title--solucx--test {
+  text-decoration: none;
+  font-size: 24px;
+  text-align: left !important;
 }
 </style>

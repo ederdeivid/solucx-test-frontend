@@ -1,6 +1,6 @@
 <template>
   <div class="row col-12 m-0 d-flex">
-    <table class="table table-striped table-dark table-hover table__status">
+    <table class="table table-striped table-hover table__status">
       <thead>
         <tr>
           <th v-for="(th, idx) in tableHeader"
@@ -8,7 +8,7 @@
               :class="th.class"
               class="table-header-class"
               @click.prevent="onSort(th.value, idx)">
-            {{ th.header }} <i class="mdi text-white"
+            {{ th.header }} <i class="mdi"
                :class="classSortedMenu(idx)" />
           </th>
         </tr>
@@ -158,7 +158,7 @@ export default class DeliveryProgressStatus extends Vue {
     this.pagination.totalRows = Number(headers['x-total-count'])
   }
 
-  classSortedMenu (index: number) {
+  classSortedMenu (index: number): string | void {
     const classes: GenericSort = { 0: '', 1: 'mdi-menu-down', 2: 'mdi-menu-up' }
     if (index !== this.indexSorted) return
     return classes[this.currentClick]
@@ -216,6 +216,6 @@ export default class DeliveryProgressStatus extends Vue {
 }
 
 .table-header-class:hover {
-  color: #ccc;
+  background-color: #ccc;
 }
 </style>
