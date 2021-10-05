@@ -1,6 +1,15 @@
 <template>
-  <!-- <search /> -->
-  <status />
+  <div class="mb-5">
+    <search @on-request="data => requestData = data"
+            :sorted="sorted"
+            :page="page" />
+  </div>
+
+  <div>
+    <status :requestData="requestData"
+            @on-paginate="data => page = data"
+            @on-sort="data => sorted = data" />
+  </div>
 </template>
 
 <script lang="ts">
@@ -15,5 +24,9 @@ import Status from './Status.vue'
     Status
   }
 })
-export default class DeliveryProgress extends Vue {}
+export default class DeliveryProgress extends Vue {
+  requestData = {}
+  sorted = {}
+  page = 1
+}
 </script>

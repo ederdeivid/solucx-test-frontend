@@ -10,6 +10,15 @@ export type DroneDetails = {
   fly: string
 }
 
+export type inputSelect = {
+  text: string | number
+  value: string | number
+}
+
+export type FlyingWay = {
+  [arg: string]: () => number[] | string
+}
+
 export type DroneRequestResponse = {
   config: {}
   data: DroneDetails[]
@@ -41,6 +50,19 @@ export type ClassesBatteryPercent = {
   50: string
 }
 
+export type searchParams = {
+  id?: number | string
+  fly?: string | number[]
+  name?: string
+  status?: string
+  _page?: string | number
+  _limit?: string | number
+  _sort?: string
+  _order?: _order
+}
+
+type _order = 'asc' | 'desc' | ''
+
 export type AllVooStatus = {
   flying: string
   charging: string
@@ -48,6 +70,26 @@ export type AllVooStatus = {
   repair: string
   offline: string
   failed: string
+}
+
+export type TableHeaders = {
+  header: string
+  value: string | number
+  sort: boolean
+  class?: string
+}
+
+export type SortOrder = {
+  [key: number]: 'asc' | 'desc' | ''
+}
+
+export type GenericSort = {
+  [key: number]: string
+}
+
+export type SortedParams = {
+  _sort: string
+  _order: _order
 }
 
 export type KeyofClassesBattery = keyof ClassesBatteryPercent

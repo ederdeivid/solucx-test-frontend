@@ -3,13 +3,14 @@
     <table class="table table-striped table-dark table-hover table__status">
       <thead>
         <tr>
-          <th>DRONE</th>
-          <th>CLIENTE</th>
-          <th class="d-none d-md-table-cell">BATERIA</th>
-          <th class="d-none d-md-table-cell">VELOCIDADE MÁXIMA</th>
-          <th class="d-none d-md-table-cell">VELOCIDADE MÉDIA</th>
-          <th>VÔO ATUAL</th>
-          <th>STATUS</th>
+          <th v-for="(th, idx) in tableHeader"
+              :key="idx"
+              :class="th.class"
+              class="table-header-class"
+              @click.prevent="onSort(th.value, idx)">
+            {{ th.header }} <i class="mdi text-white"
+               :class="classSortedMenu(idx)" />
+          </th>
         </tr>
       </thead>
       <tbody>
@@ -48,7 +49,9 @@
                                    type="m/h" />
           </td>
           <td @click.stop>
-            <arrow-slider :value="drone.fly" :type="drone.status" />
+            <arrow-slider :value="drone.fly"
+                          :status="drone.status"
+                          :unabledStatus="unabledStatus" />
           </td>
           <td>
             <a class="btn btn-sm text-uppercase"
@@ -66,15 +69,16 @@
 </template>
 
 <script lang="ts">
-import axios from 'axios'
 import {
   ClassesBatteryPercent,
   KeyofClassesBattery,
   DroneDetails,
   DroneRequestResponse,
   RequestParams,
-  ResponseHeader,
-  AllVooStatus
+  AllVooStatus,
+  TableHeaders,
+  SortOrder,
+  GenericSort
 } from '@/types/DeliveryProgress'
 import Popover from '@/components/Popover.vue'
 import { PaginationParams } from '@/types/Pagination'
@@ -84,80 +88,115 @@ import SmallDecimalNumbers from '@/components/SmallDecimalNumbers.vue'
 import ArrowSlider from '@/components/ArrowSlider.vue'
 
 @Options({
-  props: {},
+  props: {
+    requestData: Object
+  },
   components: {
     SmallDecimalNumbers,
     ArrowSlider,
     Pagination,
     Popover
+  },
+  emits: ['on-paginate', 'on-sort'],
+  watch: {
+    requestData (request: DroneRequestResponse) {
+      this.formatDroneData(request)
+    }
   }
 })
+
 export default class DeliveryProgressStatus extends Vue {
+  page = 1
+  indexSorted = 0
+  sortedField = ''
+  currentClick = 0
   drones: DroneDetails[] | string = ''
   pagination: PaginationParams = {
-    limit: 12,
+    limit: 10,
     totalRows: 1,
     currentPage: 1
   }
 
+  classesByBatteryPercent: ClassesBatteryPercent = {
+    10: 'bg-danger',
+    25: 'bg-warning',
+    50: 'bg-success'
+  }
+
+  sortOrder: SortOrder = {
+    0: '',
+    1: 'asc',
+    2: 'desc'
+  }
+
+  tableHeader: TableHeaders[] = [
+    { header: 'Drone', value: 'id', sort: true },
+    { header: 'Cliente', value: 'name', sort: true },
+    { header: 'Bateria', value: 'battery', sort: true, class: 'd-none d-md-table-cell' },
+    { header: 'Veloc. Máxima', value: 'max_speed', sort: true, class: 'd-none d-md-table-cell' },
+    { header: 'Veloc. Média', value: 'average_speed', sort: true, class: 'd-none d-md-table-cell' },
+    { header: 'Vôo Atual', value: 'fly', sort: true },
+    { header: 'Status', value: 'status', sort: true }
+  ]
+
+  unabledStatus: string[] = ['charging', 'offline']
+
+  status: AllVooStatus = {
+    repair: 'btn-warning',
+    success: 'btn-success',
+    charging: 'btn-info disabled',
+    offline: 'btn-info disabled',
+    failed: 'btn-danger',
+    flying: 'btn-info'
+  }
+
   queryString: RequestParams = {}
 
-  mounted (): void {
-    this.request()
-  }
-
-  async request (): Promise<void> {
-    try {
-      const { data, headers }: DroneRequestResponse = await axios.get('http://services.solucx.com.br/mock/drones?_page=1&_limit=12')
-
-      this.setPaginationValues(headers)
-      this.drones = data
-    } catch (e) {
-      console.error(e)
-    }
-  }
-
-  get unabledStatus (): { charging: string, offline: string } {
-    return {
-      charging: 'dashed',
-      offline: 'dashed'
-    }
-  }
-
-  onPaginate (page: number): void {
-    console.log(page)
-  }
-
-  setPaginationValues (headers: ResponseHeader): void {
+  formatDroneData (requestData: DroneRequestResponse): void {
+    const { data, headers } = requestData
+    this.drones = data
     this.pagination.totalRows = Number(headers['x-total-count'])
   }
 
+  classSortedMenu (index: number) {
+    const classes: GenericSort = { 0: '', 1: 'mdi-menu-down', 2: 'mdi-menu-up' }
+    if (index !== this.indexSorted) return
+    return classes[this.currentClick]
+  }
+
+  onPaginate (page: number): void {
+    this.$emit('on-paginate', page)
+  }
+
   vooStatus (status: keyof AllVooStatus): string {
-    const a: AllVooStatus = {
-      repair: 'btn-warning',
-      success: 'btn-success',
-      charging: 'btn-info disabled',
-      offline: 'btn-info disabled',
-      failed: 'btn-danger',
-      flying: 'btn-info'
+    return this.status[status] || 'btn-info'
+  }
+
+  onSort (sortedField: string, index: number): void {
+    if (!this.drones.length) return
+
+    if (this.sortedField !== sortedField) (this.currentClick = 0)
+
+    this.currentClick += 1
+    this.indexSorted = index
+    const _order = this.sortOrder[this.currentClick]
+    this.sortedField = sortedField
+
+    if (this.currentClick % 3 === 0) {
+      this.currentClick = 0
+      return this.$emit('on-sort', { _sort: '', _order: '' })
     }
 
-    return a[status] || 'btn-info'
+    this.$emit('on-sort', { _sort: sortedField, _order })
   }
 
   batteryLevel (batteryStatus: number): string {
-    const classesByBatteryPercent: ClassesBatteryPercent = {
-      10: 'bg-danger',
-      25: 'bg-warning',
-      50: 'bg-success'
-    }
-
-    const keys = Object.keys(classesByBatteryPercent)
+    const keys = Object.keys(this.classesByBatteryPercent)
       .map(x => Number(x))
       .filter(x => x < Number(batteryStatus))
 
     const batteryAprox = Math.max(...keys) as unknown as KeyofClassesBattery
-    return classesByBatteryPercent[batteryAprox]
+    return this.classesByBatteryPercent[batteryAprox]
   }
 
   showDetails (droneDetail: DroneDetails): void {
@@ -169,8 +208,14 @@ export default class DeliveryProgressStatus extends Vue {
   }
 }
 </script>
+
 <style scoped>
-.clickable__table {
+.clickable__table,
+.table-header-class {
   cursor: pointer;
+}
+
+.table-header-class:hover {
+  color: #ccc;
 }
 </style>

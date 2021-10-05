@@ -2,7 +2,7 @@
   <div id="nav">
     <router-link to="/">Home</router-link>
   </div>
-  <router-view/>
+  <router-view />
 </template>
 
 <style>
@@ -12,6 +12,10 @@
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+}
+
+body {
+  background-color: #343a40 !important;
 }
 
 #nav {
