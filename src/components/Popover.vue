@@ -24,13 +24,13 @@ import $ from 'jquery'
 
 @Options({
   props: {
-    container: String,
-    classes: String,
-    color: String,
-    placement: [String, Function],
+    content: [String, Number, Element, Function],
     title: [String, Element, Function],
+    placement: [String, Function],
+    container: String,
     trigger: String,
-    content: [String, Number, Element, Function]
+    classes: String,
+    color: String
   }
 })
 export default class Popover extends Vue {
@@ -42,11 +42,11 @@ export default class Popover extends Vue {
   trigger!: ''
   content!: ''
 
-  mounted () {
+  mounted (): void {
     this.startPopover()
   }
 
-  startPopover () {
+  startPopover (): void {
     /* @ts-expect-error: Popover isn't a method of jquery */
     $('[data-toggle="popover"]').popover({})
   }

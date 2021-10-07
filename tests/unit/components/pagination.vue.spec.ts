@@ -4,7 +4,7 @@ import { shallowMount } from '@vue/test-utils'
 const pages = {
   limit: 10,
   totalRows: 100,
-  currentPage: 1
+  currentPage: 2
 }
 
 describe('Pagination component', () => {
@@ -31,7 +31,23 @@ describe('Pagination component', () => {
       const wrapper = shallowMount(Pagination)
       const vm = wrapper.vm
       vm.paginate(pages.currentPage + 1)
-      expect(wrapper.emitted('on-paginate')).toEqual([[2]])
+      expect(wrapper.emitted('on-paginate')).toEqual([[3]])
+    })
+
+    it('should emit an event with the previous page number', () => {
+      const wrapper = shallowMount(Pagination)
+      const vm = wrapper.vm
+      vm.paginate(pages.currentPage - 1)
+      expect(wrapper.emitted('on-paginate')).toEqual([[1]])
+    })
+  })
+
+  describe('Clicking previous page when are in page 1', () => {
+    it('shouldnt emit an event if is going to lower than 1', () => {
+      const wrapper = shallowMount(Pagination)
+      const vm = wrapper.vm
+      vm.paginate(pages.currentPage - 2)
+      expect(wrapper.emitted('on-paginate')).not.toBeTruthy()
     })
   })
 })

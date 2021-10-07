@@ -56,7 +56,7 @@ export default class Pagination extends Vue {
   }
 
   paginate (page: number): void {
-    if (isNaN(page)) return
+    if (isNaN(page) || page < 1) return
     this.pages.currentPage = page
     this.$emit('on-paginate', page)
   }

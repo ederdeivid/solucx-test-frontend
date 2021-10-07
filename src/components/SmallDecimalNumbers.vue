@@ -13,8 +13,8 @@ import { DecimalComponent } from '@/types/SmallDecimalComponent'
 
 @Options({
   props: {
-    value: [String, Number],
-    type: String
+    value: { type: [String, Number], default: '' },
+    type: { type: String, default: '' }
   }
 })
 export default class SmallDecimalNumbers extends Vue {
