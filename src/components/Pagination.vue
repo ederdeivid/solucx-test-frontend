@@ -32,7 +32,10 @@ import { Options, Vue } from 'vue-class-component'
 
 @Options({
   props: {
-    pages: Object
+    pages: {
+      type: Object,
+      default: {}
+    }
   }
 })
 
@@ -44,7 +47,7 @@ export default class Pagination extends Vue {
   }
 
   get totalPages (): number {
-    return Math.ceil(this.pages.totalRows / this.pages.limit)
+    return Math.ceil(Number(this.pages.totalRows) / Number(this.pages.limit))
   }
 
   get currentPage (): number {

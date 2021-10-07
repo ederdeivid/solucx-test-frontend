@@ -35,9 +35,18 @@ import { Options, Vue } from 'vue-class-component'
 
 @Options({
   props: {
-    value: [String, Number],
-    unabledStatus: Array,
-    status: String
+    value: {
+      type: [String, Number],
+      default: 0
+    },
+    unabledStatus: {
+      type: Array,
+      default: []
+    },
+    status: {
+      type: String,
+      default: ''
+    }
   }
 })
 export default class ArrowProgressBar extends Vue {
@@ -47,10 +56,6 @@ export default class ArrowProgressBar extends Vue {
 
   get biggerThanFifty (): boolean {
     return this.value > 50
-  }
-
-  get unallowedStatus (): string[] {
-    return ['offline', 'charging']
   }
 
   get dashedClass (): boolean {

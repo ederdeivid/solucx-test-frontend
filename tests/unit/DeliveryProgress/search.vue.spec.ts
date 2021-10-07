@@ -2,11 +2,13 @@ import { shallowMount } from '@vue/test-utils'
 import DronesSearch from '@/views/DeliveryProgress/Search.vue'
 
 describe('Search.vue', () => {
-  describe('aaa', () => {
-    const wrapper = shallowMount(DronesSearch)
-    expect(wrapper.props()).toEqual({
-      page: 1,
-      sorted: {}
+  describe('Check props', () => {
+    it('check if all props are ok', () => {
+      const wrapper = shallowMount(DronesSearch)
+      expect(wrapper.props()).toEqual({
+        page: 1,
+        sorted: {}
+      })
     })
   })
 

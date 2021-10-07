@@ -13,7 +13,7 @@
           </th>
         </tr>
       </thead>
-      <tbody>
+      <tbody id="table-drones-list">
         <tr v-for="(drone, idx) in drones"
             class="clickable__table"
             @click.prevent="showDetails(drone)"
