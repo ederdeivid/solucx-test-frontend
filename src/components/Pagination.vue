@@ -1,6 +1,6 @@
 <template>
   <nav aria-label="Page navigation">
-    <div class="actions d-flex align-items-center">
+    <div class="actions d-flex align-items-center mb-3">
       <div class="icons-previous-page d-flex">
         <i class="mdi mdi-arrow-collapse-left mdi-24px"
            @click.prevent="paginate(1)"
@@ -11,7 +11,7 @@
            :class="{ 'disabled__button': pages.currentPage === 1 }" />
       </div>
 
-      <small class="mx-3"> {{ pages.currentPage }} de {{ totalPages }} </small>
+      <small class="mx-3"> {{ currentPage }} de {{ totalPages }} </small>
 
       <div class="icons-next-page d-flex">
         <i class="mdi mdi-plus mdi-24px"
@@ -45,6 +45,11 @@ export default class Pagination extends Vue {
 
   get totalPages (): number {
     return Math.ceil(this.pages.totalRows / this.pages.limit)
+  }
+
+  get currentPage (): number {
+    const currentPage: number = this.pages.limit >= this.pages.totalRows ? this.pages.currentPage = 1 : this.pages.currentPage
+    return currentPage
   }
 
   paginate (page: number): void {

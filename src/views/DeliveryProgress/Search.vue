@@ -1,5 +1,6 @@
 <template>
-  <div class="d-flex flex-column flex-md-row col-12 row m-0 p-0">
+  <form class="d-flex flex-column flex-md-row col-12 row m-0 p-0"
+        @submit.prevent="resetAndRequest">
     <div class="text-left col-12 col-md-6 col-lg-2">
       <label class="m-0 font-weight-bold"
              for="delivery__progress__droneId">Drone ID: </label>
@@ -53,7 +54,7 @@
     </div>
 
     <div class="actions col-12 col-lg-1 mt-lg-4">
-      <button @click.prevent="resetAndRequest"
+      <button type="submit"
               :disabled="loading"
               class="btn btn-block btn-info">
         <i class="d-lg-block mdi mdi-magnify"
@@ -63,7 +64,7 @@
         </span>
       </button>
     </div>
-  </div>
+  </form>
 </template>
 
 <script lang="ts">
@@ -73,10 +74,16 @@ import DroneService from '@/services/Drone.service'
 
 @Options({
   props: {
-    page: Number,
-    sorted: Object
+    page: {
+      type: Number,
+      default: 1
+    },
+    sorted: {
+      type: Object,
+      default: {}
+    }
   },
-  emits: ['on-request'],
+  emits: ['on-request', 'on-reset-pagination'],
   watch: {
     page (page: number) {
       this.onPaginate(page)
@@ -139,6 +146,7 @@ export default class SearchDeliveryProgress extends Vue {
 
   resetAndRequest (): void {
     this.search._page = 1
+    this.$emit('on-reset-pagination', 1)
     this.request()
   }
 

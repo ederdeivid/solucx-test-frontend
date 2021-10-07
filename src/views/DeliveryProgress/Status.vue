@@ -89,7 +89,10 @@ import ArrowSlider from '@/components/ArrowSlider.vue'
 
 @Options({
   props: {
-    requestData: Object
+    requestData: {
+      type: Object,
+      default: {}
+    }
   },
   components: {
     SmallDecimalNumbers,

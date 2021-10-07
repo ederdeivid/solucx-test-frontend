@@ -66,10 +66,6 @@ export default class DroneDetails extends Vue {
     return JSON.parse(window.localStorage.getItem('drone-detail') || '{}')
   }
 
-  unmounted () {
-    console.log('oi')
-  }
-
   newImageSize (url: string): string {
     const urlWithoutQueryParams = url.split('?')[0]
     const newURL = new URL(url)

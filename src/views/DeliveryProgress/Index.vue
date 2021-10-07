@@ -1,12 +1,14 @@
 <template>
   <div class="mb-5">
     <search @on-request="data => requestData = data"
+            @on-reset-pagination="(data) => $refs.status.pagination.currentPage = data"
             :sorted="sorted"
             :page="page" />
   </div>
 
   <div>
-    <status :requestData="requestData"
+    <status ref="status"
+            :requestData="requestData"
             @on-paginate="data => page = data"
             @on-sort="data => sorted = data" />
   </div>
