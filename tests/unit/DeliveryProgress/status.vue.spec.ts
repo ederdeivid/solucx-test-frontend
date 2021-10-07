@@ -31,7 +31,7 @@ describe('Search.vue', () => {
   })
 
   describe('showDetails - Click on table data and show Drone info', () => {
-    it('Push to Detail route passing Drone as params', async () => {
+    it('Push to Detail route passing Drone as params', () => {
       const mockRoute = { params: { id: 1 } }
       const mockRouter = { push: jest.fn() }
       const wrapper = shallowMount(ListDrones, {

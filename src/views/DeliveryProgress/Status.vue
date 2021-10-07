@@ -54,8 +54,8 @@
                           :unabledStatus="unabledStatus" />
           </td>
           <td>
-            <a class="btn btn-sm text-uppercase"
-               :class="vooStatus(drone.status)">{{ drone.status }}</a>
+            <a class="btn btn-sm"
+               :class="vooStatus(drone.status).class">{{ vooStatus(drone.status).text }}</a>
           </td>
         </tr>
       </tbody>
@@ -78,7 +78,8 @@ import {
   AllVooStatus,
   TableHeaders,
   SortOrder,
-  GenericSort
+  GenericSort,
+  VooStatusProperties
 } from '@/types/DeliveryProgress'
 import Popover from '@/components/Popover.vue'
 import { PaginationParams } from '@/types/Pagination'
@@ -145,12 +146,12 @@ export default class DeliveryProgressStatus extends Vue {
   unabledStatus: string[] = ['charging', 'offline']
 
   status: AllVooStatus = {
-    repair: 'btn-warning',
-    success: 'btn-success',
-    charging: 'btn-info disabled',
-    offline: 'btn-info disabled',
-    failed: 'btn-danger',
-    flying: 'btn-info'
+    repair: { class: 'btn-warning', text: 'Reparo' },
+    success: { class: 'btn-success', text: 'Sucesso' },
+    charging: { class: 'btn-info disabled', text: 'Carregando' },
+    offline: { class: 'btn-info disabled', text: 'Offline' },
+    failed: { class: 'btn-danger', text: 'Falhou' },
+    flying: { class: 'btn-info', text: 'Voando' }
   }
 
   queryString: RequestParams = {}
@@ -171,8 +172,8 @@ export default class DeliveryProgressStatus extends Vue {
     this.$emit('on-paginate', page)
   }
 
-  vooStatus (status: keyof AllVooStatus): string {
-    return this.status[status] || 'btn-info'
+  vooStatus (status: keyof AllVooStatus): VooStatusProperties {
+    return this.status[status]
   }
 
   onSort (sortedField: string, index: number): void {
@@ -195,10 +196,10 @@ export default class DeliveryProgressStatus extends Vue {
 
   batteryLevel (batteryStatus: number): string {
     const keys = Object.keys(this.classesByBatteryPercent)
-      .map(x => Number(x))
-      .filter(x => x < Number(batteryStatus))
+      .map(key => Number(key))
+      .filter(key => key < Number(batteryStatus))
 
-    const batteryAprox = Math.max(...keys) as unknown as KeyofClassesBattery
+    const batteryAprox = Math.max(...keys) as KeyofClassesBattery
     return this.classesByBatteryPercent[batteryAprox]
   }
 

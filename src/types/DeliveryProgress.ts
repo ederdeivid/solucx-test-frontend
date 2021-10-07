@@ -64,12 +64,17 @@ export type searchParams = {
 type _order = 'asc' | 'desc' | ''
 
 export type AllVooStatus = {
-  flying: string
-  charging: string
-  success: string
-  repair: string
-  offline: string
-  failed: string
+  flying: VooStatusProperties
+  charging: VooStatusProperties
+  success: VooStatusProperties
+  repair: VooStatusProperties
+  offline: VooStatusProperties
+  failed: VooStatusProperties
+}
+
+export type VooStatusProperties = {
+  class: string
+  text: string
 }
 
 export type TableHeaders = {

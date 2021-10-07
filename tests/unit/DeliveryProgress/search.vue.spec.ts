@@ -13,10 +13,10 @@ describe('Search.vue', () => {
   })
 
   describe('Reset pagination', () => {
-    it('emit an event that contains reseted page', () => {
+    it('emit an event that contains reseted page', async () => {
       const wrapper = shallowMount(DronesSearch)
       const vm = wrapper.vm
-      vm.resetAndRequest()
+      await vm.resetAndRequest()
       expect(wrapper.emitted('on-reset-pagination')).toBeTruthy()
     })
   })
